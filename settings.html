@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Format Gradient Progress Bar</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://extensions.tableauusercontent.com/resources/tableau.extensions.1.17.0.min.js"></script>
+  <script src="settings.js" defer></script>
+</head>
+<body class="settings-body">
+  <div class="dialog-shell">
+    <header class="dialog-header">
+      <div>
+        <h1>Format Gradient Progress Bar</h1>
+        <p>Changes are applied live.</p>
+      </div>
+    </header>
+
+    <nav class="settings-tabs" role="tablist">
+      <button class="tab-btn active" data-tab="worksheet">Worksheet</button>
+      <button class="tab-btn" data-tab="view">View</button>
+      <button class="tab-btn" data-tab="bar">Bar</button>
+      <button class="tab-btn" data-tab="label">Label</button>
+      <button class="tab-btn" data-tab="tooltip">Tooltip</button>
+      <button class="tab-btn" data-tab="scale">Scale</button>
+    </nav>
+
+    <section class="tab-page active" data-page="worksheet">
+      <div class="settings-section">
+        <h3>Background</h3>
+        <div class="settings-grid">
+          <label class="check-row full-row">
+            <input id="transparentBackground" type="checkbox" />
+            <span>Transparent worksheet background</span>
+          </label>
+          <label>
+            <span>Background colour</span>
+            <input id="backgroundColor" type="color" />
+          </label>
+        </div>
+        <p class="help-text">Transparent removes all extension background paint. If the dashboard still looks opaque, set the Tableau worksheet/dashboard object shading to None as well.</p>
+      </div>
+    </section>
+
+    <section class="tab-page" data-page="view">
+      <div class="settings-section">
+        <h3>Chart view</h3>
+        <div class="view-options">
+          <label><input type="radio" name="viewMode" value="standard"><span><b>Standard</b><small>Natural chart size; scroll if needed.</small></span></label>
+          <label><input type="radio" name="viewMode" value="fit-width"><span><b>Fit Width</b><small>Fit the chart to the worksheet width.</small></span></label>
+          <label><input type="radio" name="viewMode" value="fit-height"><span><b>Fit Height</b><small>Fit the full chart to the worksheet height.</small></span></label>
+          <label><input type="radio" name="viewMode" value="entire-view"><span><b>Entire View</b><small>Fit both width and height to the worksheet.</small></span></label>
+        </div>
+      </div>
+    </section>
+
+    <section class="tab-page" data-page="bar">
+      <div class="settings-section">
+        <h3>Completed portion</h3>
+        <div class="settings-grid">
+          <label><span>Gradient start</span><input id="gradientStart" type="color" /></label>
+          <label><span>Gradient end</span><input id="gradientEnd" type="color" /></label>
+        </div>
+      </div>
+      <div class="settings-section">
+        <h3>Remaining portion</h3>
+        <div class="settings-grid">
+          <label><span>Stripe colour</span><input id="stripeColor" type="color" /></label>
+          <label class="check-row full-row"><input id="gapUsesBackground" type="checkbox" /><span>Use worksheet background colour for stripe gaps</span></label>
+          <label><span>Custom gap colour</span><input id="gapColor" type="color" /></label>
+          <label><span>Stripe width (px)</span><input id="stripeWidth" type="number" min="1" max="30" step="1" /></label>
+          <label><span>Stripe gap (px)</span><input id="stripeGap" type="number" min="1" max="40" step="1" /></label>
+          <label><span>Stripe angle (deg)</span><input id="stripeAngle" type="number" min="0" max="180" step="1" /></label>
+        </div>
+      </div>
+      <div class="settings-section">
+        <h3>Shape</h3>
+        <div class="settings-grid">
+          <label><span>Bar height (px)</span><input id="barHeight" type="number" min="8" max="160" step="1" /></label>
+          <label><span>Corner radius (px)</span><input id="cornerRadius" type="number" min="0" max="80" step="1" /></label>
+          <label><span>Row spacing (px)</span><input id="rowGap" type="number" min="0" max="80" step="1" /></label>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="tab-page" data-page="label">
+      <div class="settings-section">
+        <h3>Mark labels</h3>
+        <div class="settings-grid">
+          <label class="check-row full-row"><input id="showLabels" type="checkbox" /><span>Show mark labels</span></label>
+          <div class="full-row text-editor-row"><label><span>Label text</span><textarea id="labelTemplate" rows="4" placeholder="Example: <Field>"></textarea></label><button id="labelApplyBtn" class="primary-btn" type="button">Apply</button></div>
+          <div class="full-row"><span class="field-token-title">Insert field</span><div id="labelFieldTokens" class="field-tokens"></div></div>
+          <label><span>Placement</span><select id="labelPlacement"><option value="outside">Outside / around chart</option><option value="inside">Inside / on chart</option></select></label>
+          <label><span>Font</span><select id="labelFontFamily"><option>Arial</option><option>Segoe UI</option><option>Calibri</option><option>Georgia</option><option>Times New Roman</option><option>Verdana</option></select></label>
+          <label><span>Size (px)</span><input id="labelFontSize" type="number" min="6" max="72" step="1" /></label>
+          <label><span>Text colour</span><input id="labelColor" type="color" /></label>
+          <label><span>Gap from bar (px)</span><input id="labelGap" type="number" min="0" max="80" step="1" /></label>
+          <label><span>Horizontal</span><select id="labelHorizontal"><option value="left">Left</option><option value="center">Center</option><option value="right">Right</option></select></label>
+          <label><span>Vertical</span><select id="labelVertical"><option value="top">Top</option><option value="middle">Middle</option><option value="bottom">Bottom</option></select></label>
+          <label class="check-row"><input id="labelBold" type="checkbox" /><span>Bold</span></label>
+          <label class="check-row"><input id="labelItalic" type="checkbox" /><span>Italic</span></label>
+        </div>
+        <p class="help-text">Insert field lists every unique field currently used anywhere on the Marks card. Fields dropped specifically on Label are added to the Label text draft automatically when it is empty. Use tokens such as &lt;Field&gt; and click Apply to commit text edits. Other label formatting remains live.</p>
+      </div>
+    </section>
+
+    <section class="tab-page" data-page="tooltip">
+      <div class="settings-section">
+        <h3>Tooltip</h3>
+        <div class="settings-grid">
+          <label class="check-row full-row"><input id="showTooltips" type="checkbox" /><span>Show tooltip on hover</span></label>
+          <div class="full-row text-editor-row"><label><span>Tooltip text</span><textarea id="tooltipTemplate" rows="5" placeholder="Example: <Field>"></textarea></label><button id="tooltipApplyBtn" class="primary-btn" type="button">Apply</button></div>
+          <div class="full-row"><span class="field-token-title">Insert field</span><div id="tooltipFieldTokens" class="field-tokens"></div></div>
+          <label><span>Font</span><select id="tooltipFontFamily"><option>Arial</option><option>Segoe UI</option><option>Calibri</option><option>Georgia</option><option>Times New Roman</option><option>Verdana</option></select></label>
+          <label><span>Size (px)</span><input id="tooltipFontSize" type="number" min="6" max="72" step="1" /></label>
+          <label><span>Text colour</span><input id="tooltipColor" type="color" /></label>
+          <label><span>Background</span><input id="tooltipBackgroundColor" type="color" /></label>
+          <label><span>Border colour</span><input id="tooltipBorderColor" type="color" /></label>
+          <label class="check-row"><input id="tooltipBold" type="checkbox" /><span>Bold</span></label>
+          <label class="check-row"><input id="tooltipItalic" type="checkbox" /><span>Italic</span></label>
+        </div>
+        <p class="help-text">Insert field lists every unique field currently used anywhere on the Marks card. Fields dropped specifically on Tooltip are added to the Tooltip text draft automatically when it is empty. Use tokens such as &lt;Field&gt;, mix them with ordinary text, and click Apply to commit text edits. Tooltip formatting remains live.</p>
+      </div>
+    </section>
+
+    <section class="tab-page" data-page="scale">
+      <div class="settings-section">
+        <h3>Progress scale</h3>
+        <div class="settings-grid">
+          <label><span>Minimum</span><input id="minValue" type="number" step="any" /></label>
+          <label><span>Fixed maximum / target</span><input id="maxValue" type="number" step="any" /></label>
+          <label class="check-row full-row"><input id="useTargetField" type="checkbox" /><span>Use Target field when present</span></label>
+        </div>
+      </div>
+    </section>
+
+    <footer class="dialog-footer">
+      <span id="saveStatus">Live</span>
+      <button id="resetBtn" class="secondary-btn">Reset</button>
+    </footer>
+  </div>
+</body>
+</html>

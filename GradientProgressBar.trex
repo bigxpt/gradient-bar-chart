@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest manifest-version="0.1" xmlns="http://www.tableau.com/xml/extension_manifest">
+  <worksheet-extension id="com.custom.gradientprogressbar.viz" extension-version="0.9.0">
+    <default-locale>en_US</default-locale>
+    <name resource-id="name"/>
+    <description>Gradient progress bar with live formatting, transparent canvas, fit controls, animated values, editable token-based labels, all-marks field tokens, custom formatted tooltips, stripe controls, and inside/outside label placement.</description>
+    <author name="Custom" email="support@example.com" organization="Custom" website="https://example.com"/>
+    <min-api-version>1.17</min-api-version>
+    <source-location>
+      <url>http://localhost:8765/index.html</url>
+    </source-location>
+    <icon/>
+    <context-menu>
+      <configure-context-menu-item />
+    </context-menu>
+
+    <encoding id="value">
+      <display-name>Value</display-name>
+      <data-spec><data-type>numeric</data-type></data-spec>
+      <role-spec><role-type>continuous-measure</role-type></role-spec>
+      <fields max-count="1"/>
+      <encoding-icon token="metric" />
+      <tooltip>Current/completed value.</tooltip>
+    </encoding>
+
+    <encoding id="target">
+      <display-name>Target</display-name>
+      <data-spec><data-type>numeric</data-type></data-spec>
+      <role-spec><role-type>continuous-measure</role-type></role-spec>
+      <fields max-count="1"/>
+      <encoding-icon token="level" />
+      <tooltip>Optional target. Leave empty to use the fixed maximum in Format Extension.</tooltip>
+    </encoding>
+
+    <encoding id="category">
+      <display-name>Category</display-name>
+      <role-spec><role-type>discrete-dimension</role-type></role-spec>
+      <fields max-count="1"/>
+      <encoding-icon token="level-of-detail" />
+      <tooltip>Optional category for multiple progress bars.</tooltip>
+    </encoding>
+
+    <encoding id="label">
+      <display-name>Label</display-name>
+      <fields max-count="4"/>
+      <encoding-icon token="text" />
+      <tooltip>Fields shown as mark labels. Use Format Extension > Label to edit and format label text.</tooltip>
+    </encoding>
+  </worksheet-extension>
+
+  <resources>
+    <resource id="name"><text locale="en_US">Gradient Progress Bar</text></resource>
+  </resources>
+</manifest>
