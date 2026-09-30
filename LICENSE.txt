@@ -1,0 +1,11 @@
+BIGXPT: Gradient Progress Chart
+Copyright © 2026 BIGXPT. All rights reserved.
+
+This software and associated source code, documentation, branding, and assets are proprietary to BIGXPT unless otherwise stated.
+
+You may use the published extension with Tableau for personal, educational, and commercial visualization work. You may not republish, sell, sublicense, redistribute, or claim ownership of the software or source code without prior written permission from BIGXPT, except where applicable law expressly permits otherwise.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW.
+
+Contact: bigxpt@gmail.com
+Website: https://www.bigxpt.com

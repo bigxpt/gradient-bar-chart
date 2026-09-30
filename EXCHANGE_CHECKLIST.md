@@ -1,0 +1,24 @@
+# Tableau Exchange Submission Checklist
+
+- [x] Public release version set to 1.0.0
+- [x] Production source URL uses HTTPS
+- [x] Author set to BIGXPT
+- [x] Support email set to bigxpt@gmail.com
+- [x] Organisation set to BIGXPT
+- [x] Website set to https://www.bigxpt.com
+- [x] 70×70 manifest icon generated and embedded
+- [x] 280×280 Exchange icon generated
+- [x] README prepared for public release
+- [x] Privacy Policy prepared
+- [x] Terms of Service prepared
+- [x] Support page prepared
+- [x] All Rights Reserved licence added
+- [x] Exchange listing copy prepared
+- [ ] Upload privacy.html, terms.html, and support.html to GitHub Pages and verify the public URLs
+- [ ] Capture/finalize 1–3 Tableau screenshots in the dimensions requested by the current Exchange submission form
+- [ ] Test the production build in Tableau Desktop
+- [ ] Test the hosted build without the local Python server
+- [ ] Test in Tableau Public/Cloud as applicable
+- [ ] Create GitHub release/tag v1.0.0
+- [ ] Request/confirm Tableau Exchange contributor access
+- [ ] Submit the listing and respond to review comments

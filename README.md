@@ -1,41 +1,62 @@
-# BIGXPT: Gradient Progress Chart v10.1
+# BIGXPT: Gradient Progress Chart
 
-Changes in v7:
+**Version 1.0.0**  
+A free Tableau Viz Extension by **BIGXPT** for building customizable progress and target charts with gradient fills, stripe styling, rich labels, tooltips, animation, and responsive fit controls.
 
-- Fixed maximum / target now defaults to **100**.
-- Label text example now uses **`<Field>`**.
-- Label text has an **Apply** button; clicking it updates the label without closing Format Extension. Other formatting controls remain live.
-- Added a dedicated **Tooltip** tab. Tooltip text supports `<Field>` tokens and formatting for font, size, text colour, background, border, bold and italic.
-- The extension renders its own tooltip instead of relying on Tableau's native tooltip display. Fields placed on Tableau's Tooltip shelf are used as values/tokens.
-- Format Extension opens narrower, with controls stacked vertically and tabs kept horizontally aligned.
-- Existing v6 stripe defaults remain: black stripes, 2 px stripe width, 7 px stripe gap.
+## Features
 
-## Start
+- Configurable gradient progress bars and striped remainder styling
+- Value, Target, Category, and Label encodings
+- Fixed maximum/target fallback (default: 100)
+- Custom label and tooltip templates using `<Field>` placeholders
+- Rich text formatting for labels and tooltips
+- Inside/outside label placement and alignment controls
+- Configurable stripe colour, width, and gap
+- Animated value changes
+- Fit Width, Fit Height, Standard, and Entire View modes
+- Transparent worksheet background option
+- Remembers the last active Format Extension tab
 
-1. Double-click `start-server.bat`.
-2. Keep the command window open.
-3. Remove the previous extension from Tableau.
-4. Add `GradientProgressBar.trex` from this folder.
-5. Use Format Extension to configure the chart.
+## Requirements
 
+- Tableau version that supports Viz Extensions and the Extensions API level declared in `GradientProgressBar.trex`
+- Internet access to the hosted extension URL
 
-## v8 changes
-- Added an **Apply** button for Tooltip text; text edits are draft-only until Apply is clicked.
-- Label and Tooltip **Insert field** sections now list every unique field used anywhere on the active Marks card, regardless of encoding. Duplicate uses of the same underlying field are removed.
-- Fields placed specifically on Label or Tooltip still prefill the corresponding text draft when that draft is empty.
-- Label and Tooltip templates can reference any field shown in Insert field.
-- Tableau owns the Marks-card tile click behavior. The Extensions API exposes **Format Extension** as the supported configuration entry point, so clicking Tableau's Label/Tooltip tiles cannot be redirected by the extension to a specific settings tab.
+## Hosted Extension
 
+Production URL:
 
-## Version 10 changes
-- Added meaningful Tableau encoding icons to the custom Value, Target, Category and Label tiles.
-- Label uses Tableau's `text` encoding icon.
-- Tableau's built-in Tooltip tile remains the tooltip field drop zone and already uses Tableau's native tooltip icon; Viz Extensions always include the built-in Tooltip and Detail tiles.
-- Format Extension now remembers the last active tab and reopens to that tab the next time it is opened.
+`https://bigxpt.github.io/gradient-bar-chart/index.html`
 
+## Installation
 
-## v10 updates
-- Remembers the Format Extension window size and, where the Tableau host permits it, its screen position.
-- Label and Tooltip editors now support independent bold, italic and underline formatting for selected text.
-- Ctrl+Tab inserts a four-space tab when the host passes the shortcut through; the **Tab ⇥** toolbar button provides a reliable fallback.
-- Includes `GradientProgressBar.trex` for the GitHub Pages deployment and `GradientProgressBar.local.trex` for localhost development.
+1. In Tableau, add a Viz Extension to the worksheet.
+2. Select the BIGXPT Gradient Progress Chart listing from Tableau Exchange when published, or load the `GradientProgressBar.trex` manifest during testing.
+3. Add fields to the Value, Target, Category, and Label encodings as needed.
+4. Open **Format Extension** to configure colours, stripes, labels, tooltips, and layout.
+
+## Data Access and Privacy
+
+The extension uses Tableau-provided visible/summary data required to render the visualization. It does not independently transmit workbook data to BIGXPT-operated servers, and it contains no advertising, analytics, or user-tracking code. Local browser storage is used only for limited UI preferences such as the last active settings tab and remembered dialog geometry.
+
+Privacy Policy: `https://bigxpt.github.io/gradient-bar-chart/privacy.html`  
+Terms of Service: `https://bigxpt.github.io/gradient-bar-chart/terms.html`  
+Support: `https://bigxpt.github.io/gradient-bar-chart/support.html`
+
+## Support
+
+Email: **bigxpt@gmail.com**  
+Website: **https://www.bigxpt.com**  
+Repository: **https://github.com/bigxpt/gradient-bar-chart**
+
+## Licence
+
+Copyright © 2026 BIGXPT. All rights reserved.
+
+See `LICENSE.txt` for the applicable terms.
+
+## Release
+
+### 1.0.0
+
+First public Tableau Exchange release of BIGXPT: Gradient Progress Chart.
