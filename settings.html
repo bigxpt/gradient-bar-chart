@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Format Gradient Progress Bar</title>
+  <title>BIGXPT: Gradient Progress Chart</title>
   <link rel="stylesheet" href="styles.css" />
   <script src="https://extensions.tableauusercontent.com/resources/tableau.extensions.1.17.0.min.js"></script>
   <script src="settings.js" defer></script>
@@ -12,7 +12,7 @@
   <div class="dialog-shell">
     <header class="dialog-header">
       <div>
-        <h1>Format Gradient Progress Bar</h1>
+        <h1>Format Gradient Progress Chart</h1>
         <p>Changes are applied live.</p>
       </div>
     </header>
@@ -90,7 +90,17 @@
         <h3>Mark labels</h3>
         <div class="settings-grid">
           <label class="check-row full-row"><input id="showLabels" type="checkbox" /><span>Show mark labels</span></label>
-          <div class="full-row text-editor-row"><label><span>Label text</span><textarea id="labelTemplate" rows="4" placeholder="Example: <Field>"></textarea></label><button id="labelApplyBtn" class="primary-btn" type="button">Apply</button></div>
+          <div class="full-row rich-editor-block">
+            <div class="editor-heading"><span>Label text</span><button id="labelApplyBtn" class="primary-btn" type="button">Apply</button></div>
+            <div class="rich-toolbar" role="toolbar" aria-label="Label text formatting">
+              <button type="button" data-editor="labelRichEditor" data-rich-command="bold" title="Bold"><b>B</b></button>
+              <button type="button" data-editor="labelRichEditor" data-rich-command="italic" title="Italic"><i>I</i></button>
+              <button type="button" data-editor="labelRichEditor" data-rich-command="underline" title="Underline"><u>U</u></button>
+              <button type="button" data-editor="labelRichEditor" data-rich-command="clear" title="Clear formatting">Normal</button>
+              <button type="button" data-editor="labelRichEditor" data-rich-command="insertTab" title="Insert four-space tab">Tab ⇥</button>
+            </div>
+            <div id="labelRichEditor" class="rich-editor" contenteditable="true" role="textbox" aria-multiline="true" data-placeholder="Example: <Field>"></div>
+          </div>
           <div class="full-row"><span class="field-token-title">Insert field</span><div id="labelFieldTokens" class="field-tokens"></div></div>
           <label><span>Placement</span><select id="labelPlacement"><option value="outside">Outside / around chart</option><option value="inside">Inside / on chart</option></select></label>
           <label><span>Font</span><select id="labelFontFamily"><option>Arial</option><option>Segoe UI</option><option>Calibri</option><option>Georgia</option><option>Times New Roman</option><option>Verdana</option></select></label>
@@ -102,7 +112,7 @@
           <label class="check-row"><input id="labelBold" type="checkbox" /><span>Bold</span></label>
           <label class="check-row"><input id="labelItalic" type="checkbox" /><span>Italic</span></label>
         </div>
-        <p class="help-text">Insert field lists every unique field currently used anywhere on the Marks card. Fields dropped specifically on Label are added to the Label text draft automatically when it is empty. Use tokens such as &lt;Field&gt; and click Apply to commit text edits. Other label formatting remains live.</p>
+        <p class="help-text">Insert field lists every unique field currently used anywhere on the Marks card. Fields dropped specifically on Label are added to the Label text draft automatically when it is empty. Use tokens such as &lt;Field&gt;. Select text and use B, I or U for independent rich formatting. Ctrl+Tab inserts a four-space tab when the Tableau host passes that shortcut through; the Tab ⇥ button is always available. Click Apply to commit text edits. Other label formatting remains live.</p>
       </div>
     </section>
 
@@ -111,7 +121,17 @@
         <h3>Tooltip</h3>
         <div class="settings-grid">
           <label class="check-row full-row"><input id="showTooltips" type="checkbox" /><span>Show tooltip on hover</span></label>
-          <div class="full-row text-editor-row"><label><span>Tooltip text</span><textarea id="tooltipTemplate" rows="5" placeholder="Example: <Field>"></textarea></label><button id="tooltipApplyBtn" class="primary-btn" type="button">Apply</button></div>
+          <div class="full-row rich-editor-block">
+            <div class="editor-heading"><span>Tooltip text</span><button id="tooltipApplyBtn" class="primary-btn" type="button">Apply</button></div>
+            <div class="rich-toolbar" role="toolbar" aria-label="Tooltip text formatting">
+              <button type="button" data-editor="tooltipRichEditor" data-rich-command="bold" title="Bold"><b>B</b></button>
+              <button type="button" data-editor="tooltipRichEditor" data-rich-command="italic" title="Italic"><i>I</i></button>
+              <button type="button" data-editor="tooltipRichEditor" data-rich-command="underline" title="Underline"><u>U</u></button>
+              <button type="button" data-editor="tooltipRichEditor" data-rich-command="clear" title="Clear formatting">Normal</button>
+              <button type="button" data-editor="tooltipRichEditor" data-rich-command="insertTab" title="Insert four-space tab">Tab ⇥</button>
+            </div>
+            <div id="tooltipRichEditor" class="rich-editor" contenteditable="true" role="textbox" aria-multiline="true" data-placeholder="Example: <Field>"></div>
+          </div>
           <div class="full-row"><span class="field-token-title">Insert field</span><div id="tooltipFieldTokens" class="field-tokens"></div></div>
           <label><span>Font</span><select id="tooltipFontFamily"><option>Arial</option><option>Segoe UI</option><option>Calibri</option><option>Georgia</option><option>Times New Roman</option><option>Verdana</option></select></label>
           <label><span>Size (px)</span><input id="tooltipFontSize" type="number" min="6" max="72" step="1" /></label>
@@ -121,7 +141,7 @@
           <label class="check-row"><input id="tooltipBold" type="checkbox" /><span>Bold</span></label>
           <label class="check-row"><input id="tooltipItalic" type="checkbox" /><span>Italic</span></label>
         </div>
-        <p class="help-text">Insert field lists every unique field currently used anywhere on the Marks card. Fields dropped specifically on Tooltip are added to the Tooltip text draft automatically when it is empty. Use tokens such as &lt;Field&gt;, mix them with ordinary text, and click Apply to commit text edits. Tooltip formatting remains live.</p>
+        <p class="help-text">Insert field lists every unique field currently used anywhere on the Marks card. Fields dropped specifically on Tooltip are added to the Tooltip text draft automatically when it is empty. Use tokens such as &lt;Field&gt;, mix them with ordinary text, and format selected text independently with B, I or U. Ctrl+Tab inserts a four-space tab when the Tableau host passes that shortcut through; the Tab ⇥ button is always available. Click Apply to commit text edits. Tooltip formatting remains live.</p>
       </div>
     </section>
 
@@ -137,8 +157,11 @@
     </section>
 
     <footer class="dialog-footer">
-      <span id="saveStatus">Live</span>
-      <button id="resetBtn" class="secondary-btn">Reset</button>
+      <div class="footer-left">
+        <button id="resetBtn" class="secondary-btn">Reset</button>
+        <span id="saveStatus" class="save-status-visually-hidden" aria-live="polite">Live</span>
+      </div>
+      <div class="footer-brand" aria-label="by @bigxpt"><span class="brand-by">by</span> <span class="brand-handle">@bigxpt</span></div>
     </footer>
   </div>
 </body>

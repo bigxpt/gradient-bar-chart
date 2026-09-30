@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest manifest-version="0.1" xmlns="http://www.tableau.com/xml/extension_manifest">
-  <worksheet-extension id="com.custom.gradientprogressbar.viz" extension-version="0.9.0">
+  <worksheet-extension id="com.custom.gradientprogressbar.viz" extension-version="0.10.0">
     <default-locale>en_US</default-locale>
     <name resource-id="name"/>
-    <description>Gradient progress bar with live formatting, transparent canvas, fit controls, animated values, editable token-based labels, all-marks field tokens, custom formatted tooltips, stripe controls, and inside/outside label placement.</description>
+    <description>Gradient progress bar with live formatting, transparent canvas, fit controls, animated values, rich-text token-based labels, all-marks field tokens, rich-text tooltips, stripe controls, and inside/outside label placement.</description>
     <author name="Custom" email="support@example.com" organization="Custom" website="https://example.com"/>
     <min-api-version>1.17</min-api-version>
     <source-location>
-      <url>http://localhost:8765/index.html</url>
+      <url>https://bigxpt.github.io/gradient-bar-chart/index.html</url>
     </source-location>
     <icon/>
     <context-menu>
@@ -49,6 +49,6 @@
   </worksheet-extension>
 
   <resources>
-    <resource id="name"><text locale="en_US">Gradient Progress Bar</text></resource>
+    <resource id="name"><text locale="en_US">BIGXPT: Gradient Progress Chart</text></resource>
   </resources>
 </manifest>

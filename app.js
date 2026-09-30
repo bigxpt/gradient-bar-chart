@@ -30,8 +30,10 @@
     labelVertical: 'middle',
     labelGap: 10,
     labelTemplate: '',
+    labelTemplateRich: '',
     showTooltips: true,
     tooltipTemplate: '',
+    tooltipTemplateRich: '',
     tooltipFontFamily: 'Arial',
     tooltipFontSize: 12,
     tooltipColor: '#222222',
@@ -39,7 +41,7 @@
     tooltipBorderColor: '#b8b8b8',
     tooltipBold: false,
     tooltipItalic: false,
-    settingsVersion: 9
+    settingsVersion: 10
   };
 
   let settings = { ...DEFAULTS };
@@ -47,8 +49,6 @@
   let rendering = false;
   let rerenderQueued = false;
   let lastDataTable = null;
-  let nativeHoverToken = 0;
-  let nativeHoverDisabled = false;
   const progressMemory = new Map();
   const $ = id => document.getElementById(id);
 
@@ -77,12 +77,14 @@
       const parsed = saved ? JSON.parse(saved) : {};
       settings = { ...DEFAULTS, ...parsed };
       // Migrate older versions to the new requested defaults once.
-      if (!parsed.settingsVersion || parsed.settingsVersion < 9) {
+      if (!parsed.settingsVersion || parsed.settingsVersion < 10) {
         settings.stripeColor = '#000000';
         settings.stripeWidth = 2;
         settings.stripeGap = 7;
         if (!parsed.settingsVersion || parsed.settingsVersion < 7) settings.maxValue = 100;
-        settings.settingsVersion = 9;
+        if (!parsed.labelTemplateRich && parsed.labelTemplate) settings.labelTemplateRich = plainTextToHtml(parsed.labelTemplate);
+        if (!parsed.tooltipTemplateRich && parsed.tooltipTemplate) settings.tooltipTemplateRich = plainTextToHtml(parsed.tooltipTemplate);
+        settings.settingsVersion = 10;
       }
       if (settings.gapUsesBackground === undefined && settings.transparentGap !== undefined) {
         settings.gapUsesBackground = !!settings.transparentGap;
@@ -108,7 +110,11 @@
     let lastError = null;
     for (const dialogStyle of stylesToTry) {
       try {
-        const options = { width: 420, height: 700 };
+        const geometry = readDialogGeometry();
+        const options = {
+          width: geometry ? clamp(geometry.width, 360, 1200) : 420,
+          height: geometry ? clamp(geometry.height, 480, 1200) : 700
+        };
         if (dialogStyle) options.dialogStyle = dialogStyle;
         await tableau.extensions.ui.displayDialogAsync(url, payload, options);
         return;
@@ -122,6 +128,19 @@
     // Do not throw back into Tableau's Format Extension command. Keep the
     // worksheet usable and record the diagnostic in the developer console.
     console.error('Unable to open settings dialog:', lastError);
+  }
+
+
+  function readDialogGeometry() {
+    try {
+      const raw = localStorage.getItem('gradientProgressDialogGeometryV1');
+      if (!raw) return null;
+      const g = JSON.parse(raw);
+      if (!Number.isFinite(g.width) || !Number.isFinite(g.height)) return null;
+      return g;
+    } catch (_) {
+      return null;
+    }
   }
 
   function scheduleRender() {
@@ -176,10 +195,10 @@
         });
 
         const autoLabel = labelCols.map(c => displayValue(dataRow[c.index])).filter(Boolean).join(' · ');
-        const label = renderLabelTemplate(settings.labelTemplate, allValues, autoLabel);
+        const labelHtml = renderRichTemplateHtml(settings.labelTemplateRich, settings.labelTemplate, allValues, autoLabel);
         const tooltipLines = tooltipCols.map(c => `${c.fieldName}: ${displayValue(dataRow[c.index])}`);
-        const tooltip = renderLabelTemplate(settings.tooltipTemplate, allValues, tooltipLines.join('\n'));
-        return { key: i, rowIndex: i, dataRow, value, target, category, label, tooltip };
+        const tooltipHtml = renderRichTemplateHtml(settings.tooltipTemplateRich, settings.tooltipTemplate, allValues, tooltipLines.join('\n'));
+        return { key: i, rowIndex: i, dataRow, value, target, category, labelHtml, tooltipHtml };
       }).filter(d => Number.isFinite(d.value) && Number.isFinite(d.target));
 
       applyBackground();
@@ -292,10 +311,10 @@
 
       row.appendChild(track);
 
-      if (settings.showLabels && d.label) {
+      if (settings.showLabels && d.labelHtml) {
         const label = document.createElement('div');
         label.className = `mark-label label-placement-${settings.labelPlacement} label-h-${settings.labelHorizontal} label-v-${settings.labelVertical}`;
-        label.textContent = d.label;
+        label.innerHTML = d.labelHtml;
         label.style.fontFamily = settings.labelFontFamily;
         label.style.fontSize = `${settings.labelFontSize}px`;
         label.style.color = settings.labelColor;
@@ -411,9 +430,9 @@
 
   function showConfiguredTooltip(d, event) {
     const tooltip = $('tableauTooltip');
-    if (!tooltip || !settings.showTooltips || !d.tooltip) return;
+    if (!tooltip || !settings.showTooltips || !d.tooltipHtml) return;
 
-    tooltip.textContent = d.tooltip;
+    tooltip.innerHTML = d.tooltipHtml;
     tooltip.style.fontFamily = settings.tooltipFontFamily;
     tooltip.style.fontSize = `${settings.tooltipFontSize}px`;
     tooltip.style.color = settings.tooltipColor;
@@ -447,15 +466,68 @@
     if (tooltip) tooltip.classList.add('hidden');
   }
 
-  function renderLabelTemplate(template, values, fallback) {
-    const source = String(template || '').trim();
-    if (!source) return fallback;
-    return source.replace(/<([^<>]+)>/g, (match, field) => {
-      const exact = values[field];
-      if (exact !== undefined) return exact;
-      const normalized = values[normalizeFieldName(field)];
-      return normalized !== undefined ? normalized : match;
+  function renderRichTemplateHtml(richTemplate, legacyTemplate, values, fallback) {
+    const source = String(richTemplate || '').trim();
+    if (!source) {
+      const legacy = String(legacyTemplate || '').trim();
+      if (legacy) return replaceTokensInSafeHtml(plainTextToHtml(legacy), values);
+      return plainTextToHtml(fallback || '');
+    }
+    return replaceTokensInSafeHtml(sanitizeRichHtml(source), values);
+  }
+
+  function replaceTokensInSafeHtml(html, values) {
+    const template = document.createElement('template');
+    template.innerHTML = sanitizeRichHtml(html);
+    const walker = document.createTreeWalker(template.content, NodeFilter.SHOW_TEXT);
+    const nodes = [];
+    while (walker.nextNode()) nodes.push(walker.currentNode);
+    nodes.forEach(node => {
+      const text = node.nodeValue || '';
+      const re = /<([^<>]+)>/g;
+      let last = 0;
+      let match;
+      const fragment = document.createDocumentFragment();
+      let changed = false;
+      while ((match = re.exec(text))) {
+        changed = true;
+        if (match.index > last) fragment.appendChild(document.createTextNode(text.slice(last, match.index)));
+        const field = match[1];
+        const exact = values[field];
+        const normalized = values[normalizeFieldName(field)];
+        const value = exact !== undefined ? exact : (normalized !== undefined ? normalized : match[0]);
+        fragment.appendChild(document.createTextNode(String(value)));
+        last = match.index + match[0].length;
+      }
+      if (!changed) return;
+      if (last < text.length) fragment.appendChild(document.createTextNode(text.slice(last)));
+      node.replaceWith(fragment);
     });
+    return template.innerHTML;
+  }
+
+  function sanitizeRichHtml(html) {
+    const template = document.createElement('template');
+    template.innerHTML = String(html || '');
+    const allowed = new Set(['B','STRONG','I','EM','U','BR','DIV','P','SPAN']);
+    const walk = node => {
+      [...node.childNodes].forEach(child => {
+        if (child.nodeType === Node.ELEMENT_NODE) {
+          if (!allowed.has(child.tagName)) {
+            child.replaceWith(...child.childNodes);
+            return;
+          }
+          [...child.attributes].forEach(attr => child.removeAttribute(attr.name));
+          walk(child);
+        }
+      });
+    };
+    walk(template.content);
+    return template.innerHTML;
+  }
+
+  function plainTextToHtml(text) {
+    return escapeHtml(String(text || '')).replace(/\r?\n/g, '<br>');
   }
 
   function applyBackground() {

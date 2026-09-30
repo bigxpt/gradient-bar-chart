@@ -1,4 +1,4 @@
-# Gradient Progress Bar v7
+# BIGXPT: Gradient Progress Chart v10.1
 
 Changes in v7:
 
@@ -27,8 +27,15 @@ Changes in v7:
 - Tableau owns the Marks-card tile click behavior. The Extensions API exposes **Format Extension** as the supported configuration entry point, so clicking Tableau's Label/Tooltip tiles cannot be redirected by the extension to a specific settings tab.
 
 
-## Version 9 changes
+## Version 10 changes
 - Added meaningful Tableau encoding icons to the custom Value, Target, Category and Label tiles.
 - Label uses Tableau's `text` encoding icon.
 - Tableau's built-in Tooltip tile remains the tooltip field drop zone and already uses Tableau's native tooltip icon; Viz Extensions always include the built-in Tooltip and Detail tiles.
 - Format Extension now remembers the last active tab and reopens to that tab the next time it is opened.
+
+
+## v10 updates
+- Remembers the Format Extension window size and, where the Tableau host permits it, its screen position.
+- Label and Tooltip editors now support independent bold, italic and underline formatting for selected text.
+- Ctrl+Tab inserts a four-space tab when the host passes the shortcut through; the **Tab ⇥** toolbar button provides a reliable fallback.
+- Includes `GradientProgressBar.trex` for the GitHub Pages deployment and `GradientProgressBar.local.trex` for localhost development.
